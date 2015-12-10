@@ -34,6 +34,9 @@ import org.kitesdk.morphline.base.AbstractCommand;
 import org.kitesdk.morphline.base.Configs;
 import org.kitesdk.morphline.base.Fields;
 import org.kitesdk.morphline.base.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 import com.ngdata.hbaseindexer.parse.ByteArrayExtractor;
 import com.ngdata.hbaseindexer.parse.ByteArrayValueMapper;
@@ -48,7 +51,9 @@ import com.typesafe.config.Config;
  * SolrInputDocument.
  */
 public final class ExtractHBaseCellsBuilder implements CommandBuilder {
-
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ExtractHBaseCellsBuilder.class);
+	
     @Override
     public Collection<String> getNames() {
         return Collections.singletonList("extractHBaseCells");
@@ -110,10 +115,19 @@ public final class ExtractHBaseCellsBuilder implements CommandBuilder {
         private final ByteArrayExtractor extractor;
         private final String type;
         private final ByteArrayValueMapper byteArrayMapper;
-
+        private final boolean isIgnoreEmpty;
+        
+        // 
+        private boolean isEmpty(Object value) {
+        	if(value == null || value.toString().length() == 0)
+        		return true;
+        	return false;
+        }
+        
         // also see ByteArrayExtractors
         public Mapping(Config config, MorphlineContext context) {
             Configs configs = new Configs();
+            this.isIgnoreEmpty = configs.getBoolean(config, "isIgnoreEmpty", false);
             this.inputColumn = resolveColumnName(configs.getString(config, "inputColumn"));
             this.columnFamily = Bytes.toBytes(splitFamilyAndQualifier(inputColumn)[0]);
             
@@ -202,6 +216,10 @@ public final class ExtractHBaseCellsBuilder implements CommandBuilder {
             Iterator<byte[]> iter = extractor.extract(result).iterator();
             while (iter.hasNext()) {
                 for (Object value : byteArrayMapper.map(iter.next())) {
+                	if(!isIgnoreEmpty && isEmpty(value)) {
+                		LOG.debug("the value of \"" + inputColumn + "\" is empty, skip this qualifier");
+                		continue;
+                	}
                     record.put(outputFieldName, value);
                 }
             }
@@ -214,6 +232,10 @@ public final class ExtractHBaseCellsBuilder implements CommandBuilder {
                 String outputField = outputFieldNames.get(i);
                 if (outputField.length() > 0) { // empty column name indicates omit this field on output
                     for (Object value : byteArrayMapper.map(input)) {
+                    	if(!isIgnoreEmpty && isEmpty(value)) {
+                    		LOG.debug("the value of \"" + inputColumn + "\" is empty, skip this qualifier");
+                    		continue;
+                    	}
                         record.put(outputField, value);
                     }
                 }
@@ -229,6 +251,10 @@ public final class ExtractHBaseCellsBuilder implements CommandBuilder {
                       byte[] tail = Bytes.tail(matchingQualifier, matchingQualifier.length - qualifier.length);
                       String outputField = outputFieldName + Bytes.toString(tail);                        
                       for (Object value : byteArrayMapper.map(iter.next())) {
+                    	  if(!isIgnoreEmpty && isEmpty(value)) {
+                    		LOG.debug("the value of \"" + inputColumn + "\" is empty, skip this qualifier");
+                      		continue;
+                      	}
                           record.put(outputField, value);
                       }
                   } else {
