@@ -117,7 +117,6 @@ public final class ExtractHBaseCellsBuilder implements CommandBuilder {
         private final ByteArrayValueMapper byteArrayMapper;
         private final boolean isIgnoreEmpty;
         
-        // 
         private boolean isEmpty(Object value) {
         	if(value == null || value.toString().length() == 0)
         		return true;
