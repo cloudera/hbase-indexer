@@ -30,7 +30,7 @@
     <version.joda-time>${cdh.joda-time.version}</version.joda-time>
     <version.slf4j>${cdh.slf4j.version}</version.slf4j>
     <version.hbase>${cdh.hbase.version}</version.hbase>
-    <version.hadoop>${cdh.hadoop.version}</version.hadoop>    
+    <version.hadoop>${cdh.hadoop.version}</version.hadoop>
     <version.zookeeper>${cdh.zookeeper.version}</version.zookeeper>
     <version.jackson>${cdh.jackson.version}</version.jackson>
     <version.jackson-mapper-asl>${cdh.jackson-mapper-asl.version}</version.jackson-mapper-asl>
@@ -43,10 +43,10 @@
     <version.jaxb-api>${cdh.jaxb-api.version}</version.jaxb-api>
     <version.curator>${cdh.curator.version}</version.curator>
     <version.solr-security-util>${cdh.solr.version}</version.solr-security-util>
-    <version.sentry-binding-hbase-indexer>${cdh.sentry.version}</version.sentry-binding-hbase-indexer>    
+    <version.sentry-binding-hbase-indexer>${cdh.sentry.version}</version.sentry-binding-hbase-indexer>
     <version.netty>${cdh.io.netty-all.version}</version.netty>
     <version.netty.hadoop>${cdh.io.netty.version}</version.netty.hadoop>
-        
+
     <version.surefire.plugin>${cdh.surefire.version}</version.surefire.plugin>
     <version.failsafe.plugin>${version.surefire.plugin}</version.failsafe.plugin>
     <skip.surefire.tests>${skipTests}</skip.surefire.tests>
@@ -346,6 +346,28 @@
         <groupId>org.apache.sentry</groupId>
         <artifactId>sentry-tools</artifactId>
         <version>${version.sentry-binding-hbase-indexer}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.solr</groupId>
@@ -630,7 +652,7 @@
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-server</artifactId>
         <version>${version.hbase}</version>
-        <type>test-jar</type>        
+        <type>test-jar</type>
         <scope>test</scope>
         <exclusions>
           <exclusion>
@@ -662,7 +684,7 @@
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase-mapreduce</artifactId>
         <version>${version.hbase}</version>
-        <type>test-jar</type>        
+        <type>test-jar</type>
         <scope>test</scope>
         <exclusions>
           <exclusion>
@@ -831,7 +853,7 @@
         <groupId>io.netty</groupId>
         <artifactId>netty</artifactId>
         <version>${version.netty.hadoop}</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-continuation</artifactId>
@@ -891,12 +913,12 @@
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-util</artifactId>
         <version>${version.jetty}</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-util-ajax</artifactId>
         <version>${version.jetty}</version>
-      </dependency>      
+      </dependency>
       <dependency>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-webapp</artifactId>
@@ -1081,7 +1103,7 @@
             </systemPropertyVariables>
             <!-- skips surefire tests without skipping failsafe tests.
                  Property value seems to magically default to false -->
-            <skipTests>${skip.surefire.tests}</skipTests>            
+            <skipTests>${skip.surefire.tests}</skipTests>
           </configuration>
         </plugin>
 
