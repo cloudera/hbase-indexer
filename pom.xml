@@ -21,7 +21,7 @@
   <parent>
     <groupId>com.cloudera.cdh</groupId>
     <artifactId>cdh-root</artifactId>
-    <version>6.3.1</version>
+    <version>6.3.2</version>
   </parent>
 
   <properties>
@@ -59,7 +59,7 @@
   <groupId>com.ngdata</groupId>
   <artifactId>hbase-indexer</artifactId>
   <packaging>pom</packaging>
-  <version>1.5-cdh6.3.1</version>
+  <version>1.5-cdh6.3.2</version>
   <name>HBase Indexer</name>
 
   <url>http://www.ngdata.com/</url>
