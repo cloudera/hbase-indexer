@@ -2,7 +2,7 @@
 
 set -ex
 
-export MAVEN_OPTS="${MAVEN_OPTS} -Xmx768m -XX:MaxPermSize=128m"
+export MAVEN_OPTS="${MAVEN_OPTS} -Xmx1g -XX:MaxPermSize=256m"
 
 # activate mvn-gbn wrapper
 mv "$(which mvn-gbn-wrapper)" "$(dirname "$(which mvn-gbn-wrapper)")/mvn"
